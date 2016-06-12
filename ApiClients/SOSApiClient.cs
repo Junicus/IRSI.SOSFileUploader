@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -33,13 +34,13 @@ namespace IRSI.SOSFileUploader.ApiClients
 
         public async Task<HttpResponseMessage> PostSOSFile(Guid storeId, byte[] fileData, string fileName)
         {
-            var requestContent = new MultipartFormDataContent();
+            var files = new MultipartFormDataContent();
             var fileContent = new ByteArrayContent(fileData);
             fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/sos");
 
-            requestContent.Add(fileContent, fileName, fileName);
+            files.Add(fileContent, "files", Path.GetFileName(fileName));
 
-            return await PostAsync($"api/sos/stores/{storeId}/uploadSOS", requestContent);
+            return await PostAsync($"api/sos/stores/{storeId}/uploadSOS", files);
         }
     }
 }

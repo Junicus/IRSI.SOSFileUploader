@@ -44,8 +44,15 @@ namespace IRSI.SOSFileUploader
             });
             builder.RegisterAssemblyModules(assembly);
             var container = builder.Build();
-            var sosFileUploader = container.Resolve<SOSFileUploader>();
-            Task.WaitAll(sosFileUploader.RunAsync());
+            try
+            {
+                var sosFileUploader = container.Resolve<SOSFileUploader>();
+                Task.WaitAll(sosFileUploader.RunAsync());
+            } catch(Exception ex)
+            {
+                //log ex
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 }

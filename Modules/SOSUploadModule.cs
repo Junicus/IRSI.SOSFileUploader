@@ -13,6 +13,8 @@ namespace IRSI.SOSFileUploader.Modules
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<FileHistoryService>().As<IFileHistoryService>();
+            builder.RegisterType<SOSLineParserService>().As<ISOSLineParserService>();
+            builder.RegisterType<SOSFileParserService>().As<ISOSFileParserService>();
             builder.RegisterType<TokenClient>().AsSelf();
             builder.RegisterType<SOSApiClient>().AsSelf();
             builder.RegisterType<SOSFileUploader>().AsSelf();

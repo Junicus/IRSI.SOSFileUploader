@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using IRSI.SOSFileUploader.ApiClients;
 using IRSI.SOSFileUploader.Configuration;
 using IRSI.SOSFileUploader.Models.Common;
+using IRSI.SOSFileUploader.Models.SOS;
 using IRSI.SOSFileUploader.Services;
 
 namespace IRSI.SOSFileUploader
@@ -16,35 +17,54 @@ namespace IRSI.SOSFileUploader
         private Store _store;
         private string _qsrPath;
         private readonly IFileHistoryService _fileHistoryService;
-        
+        private readonly ISOSFileParserService _sosFileParser;
+
         public SOSFileUploader(SOSFileUploaderOptions options,
             SOSApiClient sosApiClient,
-            IFileHistoryService fileHistoryService)
+            IFileHistoryService fileHistoryService,
+            ISOSFileParserService sosFileParser)
         {
             _qsrPath = options.QsrSOSPath;
             _fileHistoryService = fileHistoryService;
             _sosApiClient = sosApiClient;
             _store = _sosApiClient.GetStoreAsync(options.StoreId).Result;
+            _sosFileParser = sosFileParser;
         }
 
         public async Task RunAsync()
         {
-            await _fileHistoryService.LoadAsync();
-            var files = Directory.GetFiles(_qsrPath, "*.kst");
-            foreach(var file in files)
+            if (_store != null)
             {
-                if(!file.Contains("ServiceTime.kst"))
+                await _fileHistoryService.LoadAsync();
+                var files = Directory.GetFiles(_qsrPath, "*.kst");
+                foreach (var file in files)
                 {
-                    if(_fileHistoryService.IsFileNew(file))
+                    if (!file.Contains("ServTime.kst"))
                     {
-                        var response = await _sosApiClient.PostSOSFile(_store.Id, File.ReadAllBytes(file), file);
-                        if (response.IsSuccessStatusCode)
+                        if (_fileHistoryService.IsFileNew(file))
                         {
-                            _fileHistoryService.AddFile(file);
-                            await _fileHistoryService.SaveAsync();
+                            var sosItems = await _sosFileParser.ParseAsync(file, _store);
+                            var sosItemsPost = new SOSItemsPost()
+                            {
+                                StoreId = _store.Id,
+                                Filename = file,
+                                BusinessDate = sosItems.First().DateOfBusiness,
+                                SOSItems = sosItems
+                            };
+                            var response = await _sosApiClient.PostSOSFile(sosItemsPost);
+                            if (response.IsSuccessStatusCode)
+                            {
+                                _fileHistoryService.AddFile(file);
+                                await _fileHistoryService.SaveAsync();
+                            }
                         }
                     }
                 }
+            }
+            else
+            {
+                //log error store not found
+                return;
             }
         }
     }

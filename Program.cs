@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Autofac;
 using IRSI.SOSFileUploader.Configuration;
 using Microsoft.Extensions.Configuration;
+using Serilog;
 
 namespace IRSI.SOSFileUploader
 {
@@ -22,6 +23,15 @@ namespace IRSI.SOSFileUploader
                 .AddJsonFile("appsettings.json", optional: true)
                 .AddEnvironmentVariables();
             var config = cbuiler.Build();
+
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .WriteTo.ColoredConsole()
+                .WriteTo.RollingFile(config["SOSFileUploader:LogPath"] + "/Log-{Date}.txt")
+                .CreateLogger();
+
+            ILogger log = Log.ForContext<Program>();
+            log.Information("Registering Components and Modules...");
 
             builder.Register<SOSApiClientOptions>(c => new SOSApiClientOptions()
             {
@@ -46,11 +56,16 @@ namespace IRSI.SOSFileUploader
             var container = builder.Build();
             try
             {
+                log.Information("Resolving SOSFileUploader...");
                 var sosFileUploader = container.Resolve<SOSFileUploader>();
+                log.Information("SOSFileUploader resolved.");
+                log.Information("Running SOSFileUploader...");
                 Task.WaitAll(sosFileUploader.RunAsync());
-            } catch(Exception ex)
+                log.Information("SOSFileUploader finished running successfully");
+            }
+            catch (Exception ex)
             {
-                //log ex
+                log.Error(ex, "Error resolving or running SOSFileUploader");
                 Console.WriteLine(ex.Message);
             }
         }

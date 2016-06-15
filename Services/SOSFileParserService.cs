@@ -6,15 +6,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using IRSI.SOSFileUploader.Models.Common;
 using IRSI.SOSFileUploader.Models.SOS;
+using Serilog;
 
 namespace IRSI.SOSFileUploader.Services
 {
     public class SOSFileParserService : ISOSFileParserService
     {
         private readonly ISOSLineParserService _sosLineParser;
+        private readonly ILogger _log;
 
         public SOSFileParserService(ISOSLineParserService sosLineParser)
         {
+            _log = Log.ForContext<SOSFileParserService>();
             _sosLineParser = sosLineParser;
         }
 
@@ -55,6 +58,7 @@ namespace IRSI.SOSFileUploader.Services
             }
             catch (Exception ex)
             {
+                _log.Error(ex, "Error parsing file: {file}", path);
                 throw ex;
             }
         }

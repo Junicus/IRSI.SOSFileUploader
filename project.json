@@ -6,6 +6,10 @@
 
   "dependencies": {
     "Autofac": "4.0.0-rc2-240",
+    "Serilog": "2.0.0-rc-619",
+    "Serilog.Sinks.Console": "2.0.0-rc-709",
+    "Serilog.Sinks.ColoredConsole": "2.0.0-rc-704",
+    "Serilog.Sinks.RollingFile": "2.0.0-rc-706",
     "Microsoft.Extensions.Configuration": "1.0.0-rc2-final",
     "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0-rc2-final",
     "Microsoft.Extensions.Configuration.FileExtensions": "1.0.0-rc2-final",

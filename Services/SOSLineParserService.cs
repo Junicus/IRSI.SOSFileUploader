@@ -4,11 +4,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using IRSI.SOSFileUploader.Models.Common;
 using IRSI.SOSFileUploader.Models.SOS;
+using Serilog;
 
 namespace IRSI.SOSFileUploader.Services
 {
     public class SOSLineParserService : ISOSLineParserService
     {
+        private readonly ILogger _log;
+
+        public SOSLineParserService()
+        {
+            _log = Log.ForContext<SOSLineParserService>();
+        }
+
         public SOSItem Parse(string line, Store store, DateTime businessDate)
         {
             var result = new SOSItem();
@@ -45,7 +53,7 @@ namespace IRSI.SOSFileUploader.Services
             }
             catch (Exception ex)
             {
-                //log.Error(string.Format("Error parsing line {0}", ex));
+                _log.Error(ex, "Error parsing line: {line}", line);
                 throw new Exception(string.Format("Error parsing line {0}", line), ex);
             }
         }

@@ -59,7 +59,7 @@ namespace IRSI.SOSFileUploader
                                 BusinessDate = sosItems.First().DateOfBusiness,
                                 SOSItems = sosItems
                             };
-                            _log.Information("Posting to {StoreId} on {BusinessDate}", sosItemsPost);
+                            _log.Information("Posting to {StoreId} on {BusinessDate}", sosItemsPost.StoreId, sosItemsPost.BusinessDate);
                             var response = await _sosApiClient.PostSOSFile(sosItemsPost);
                             if (response.IsSuccessStatusCode)
                             {

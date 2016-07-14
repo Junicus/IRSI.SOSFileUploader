@@ -5,18 +5,18 @@
   },
 
   "dependencies": {
-    "Autofac": "4.0.0-rc2-240",
-    "Serilog": "2.0.0-rc-619",
-    "Serilog.Sinks.Console": "2.0.0-rc-709",
-    "Serilog.Sinks.ColoredConsole": "2.0.0-rc-704",
-    "Serilog.Sinks.RollingFile": "2.0.0-rc-706",
-    "Microsoft.Extensions.Configuration": "1.0.0-rc2-final",
-    "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0-rc2-final",
-    "Microsoft.Extensions.Configuration.FileExtensions": "1.0.0-rc2-final",
-    "Microsoft.Extensions.Configuration.Json": "1.0.0-rc2-final",
+    "Autofac": "4.0.0-rc3-293",
+    "Serilog": "2.0.0",
+    "Serilog.Sinks.Console": "2.0.0",
+    "Serilog.Sinks.ColoredConsole": "2.0.0",
+    "Serilog.Sinks.RollingFile": "2.0.0",
+    "Microsoft.Extensions.Configuration": "1.0.0",
+    "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0",
+    "Microsoft.Extensions.Configuration.FileExtensions": "1.0.0",
+    "Microsoft.Extensions.Configuration.Json": "1.0.0",
     "Microsoft.NETCore.App": {
       "type": "platform",
-      "version": "1.0.0-rc2-3002702"
+      "version": "1.0.0"
     }
   },
 
@@ -24,5 +24,6 @@
     "netcoreapp1.0": {
       "imports": "dnxcore50"
     }
-  }
+  },
+  "userSecretsId": "aspnet-IRSI.SOSFileUploader-20160618025021"
 }

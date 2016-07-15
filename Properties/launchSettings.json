@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "IRSI.SOSFileUploader": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

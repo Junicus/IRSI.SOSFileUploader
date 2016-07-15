@@ -23,7 +23,7 @@ namespace IRSI.SOSFileUploader
             var cbuiler = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: true)
-                .AddJsonFile($"appsettings.{environment}.json", optional: true)
+                .AddJsonFile($"appsettings.Production.json", optional: true)
                 .AddEnvironmentVariables();
             var config = cbuiler.Build();
 

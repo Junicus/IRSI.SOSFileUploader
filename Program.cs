@@ -18,9 +18,12 @@ namespace IRSI.SOSFileUploader
             var assembly = Assembly.GetEntryAssembly();
             var builder = new ContainerBuilder();
 
+            var environment = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT");
+
             var cbuiler = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: true)
+                .AddJsonFile($"appsettings.{environment}.json", optional: true)
                 .AddEnvironmentVariables();
             var config = cbuiler.Build();
 
